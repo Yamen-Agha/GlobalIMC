@@ -1,0 +1,98 @@
+﻿@using GlobalIMCSPA.Enums
+@model GlobalIMCSPA.Models.Product
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="VendorId" class="control-label"></label>
+                <input asp-for="VendorId" class="form-control" />
+                <span asp-validation-for="VendorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageFF" class="control-label"></label>
+                <div class="custom-file">
+                    <input asp-for="ImageFF" class="custom-file-input" id="ProductImage">
+                    <label class="custom-file-label" for="ProductImage">Choose file</label>
+                </div>
+                <span asp-validation-for="ImageFF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DietaryFlag" class="control-label"></label>
+                <select asp-for="DietaryFlag" class="form-control" asp-items="@(Html.GetEnumSelectList<DietaryFlags>())"></select>
+                <span asp-validation-for="DietaryFlag" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        $("form").submit(function (e) {
+
+            let Vendor = $("#VendorId").val();
+            if (Vendor) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Product/IsVendorExisits',
+                    contentType: 'application/json;',
+                    data: { id: "-1", vendorId: Vendor },
+                    success: function (found) {
+                        if (found) {
+                            e.preventDefault();
+                            alert("VendorId already exists");
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                });
+            }
+            else {
+                e.preventDefault();
+                return false;
+            }
+
+        }); 
+
+    </script>
+}
