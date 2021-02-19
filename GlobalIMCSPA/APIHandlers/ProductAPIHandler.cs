@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GlobalIMCSPA.Models;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharedEntities;
@@ -15,15 +16,38 @@ namespace GlobalIMCSPA.APIHandlers
 {
     public class ProductAPIHandler : IProductAPIHandler
     {
-        private const string PRODUCT_API_ROOT_URL = "https://localhost:44337/Product";
+        public static string API_ROOT_URL {
+            get
+            {
+                var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                var configuration = builder.Build();
+                return configuration.GetSection("ApiUrl").Get<string>();
+            }
+        }
 
-        private const string GET_ALL_URL = PRODUCT_API_ROOT_URL + "/GetAll";
-        private const string IS_VENDOR_EXISITS_URL = PRODUCT_API_ROOT_URL + "/IsVendorExisits";
-        private const string SEARCH_URL = PRODUCT_API_ROOT_URL + "/Search";
-        private const string DELETE_URL = PRODUCT_API_ROOT_URL + "/Delete";
-        private const string GET_URL = PRODUCT_API_ROOT_URL + "/Get";
-        private const string GET_WITH_INCREASE_URL = PRODUCT_API_ROOT_URL + "/GetIncrease";
-        private const string UPDATE_URL = PRODUCT_API_ROOT_URL + "/Update";
+        //private const string PRODUCT_API_ROOT_URL = "http://yamenagha766-001-site1.itempurl.com/Product";
+        
+        private static string PRODUCT_API_ROOT_URL
+        {
+            get
+            {
+                return API_ROOT_URL + "Product";
+            }
+        }
+
+        private static string GET_ALL_URL 
+        {
+            get
+            {
+                return PRODUCT_API_ROOT_URL + "/GetAll";
+            }
+        }
+
+        private static string IS_VENDOR_EXISITS_URL = PRODUCT_API_ROOT_URL + "/IsVendorExisits";
+        private static string SEARCH_URL = PRODUCT_API_ROOT_URL + "/Search";
+        private static string DELETE_URL = PRODUCT_API_ROOT_URL + "/Delete";
+        private static string GET_URL = PRODUCT_API_ROOT_URL + "/Get";
+        private static string GET_WITH_INCREASE_URL = PRODUCT_API_ROOT_URL + "/GetIncrease";
 
         private IMapper _Mapper;
 

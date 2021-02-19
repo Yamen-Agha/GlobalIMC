@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using GlobalIMCAPI.Services.ProductService;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace GlobalIMCAPI
 {
@@ -32,11 +34,16 @@ namespace GlobalIMCAPI
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IProductService, ProductService>();
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseStaticFiles();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

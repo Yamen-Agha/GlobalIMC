@@ -15,12 +15,12 @@ namespace GlobalIMCSPA.Controllers
     public class ProductController : Controller
     {
         private readonly IProductAPIHandler _ProductHandler;
-        private readonly IWebHostEnvironment _WebHostEnvironment;
+        
 
-        public ProductController(IProductAPIHandler ProductHandler, IWebHostEnvironment webHostEnvironment)
+        public ProductController(IProductAPIHandler ProductHandler)
         {
             this._ProductHandler = ProductHandler;
-            this._WebHostEnvironment = webHostEnvironment;
+            
         }
 
         // GET: ProductController
@@ -154,23 +154,6 @@ namespace GlobalIMCSPA.Controllers
             {
                 return View();
             }
-        }
-
-        private string UploadedFile(Product ProductModel)
-        {
-            string uniqueFileName = null;
-
-            if (ProductModel.ImageFF != null)
-            {
-                string uploadsFolder = Path.Combine(_WebHostEnvironment.WebRootPath, "images");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + ProductModel.ImageFF.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    ProductModel.ImageFF.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
         }
 
         [HttpGet]

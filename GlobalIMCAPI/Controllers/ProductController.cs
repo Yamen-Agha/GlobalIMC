@@ -1,4 +1,5 @@
 ﻿using GlobalIMCAPI.Services.ProductService;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SharedEntities;
@@ -15,10 +16,11 @@ namespace GlobalIMCAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _ProductService;
-
-        public ProductController(IProductService productService)
+        private readonly IWebHostEnvironment _WebHostEnvironment;
+        public ProductController(IProductService productService, IWebHostEnvironment webHostEnvironment)
         {
             this._ProductService = productService;
+            this._WebHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet("GetAll")]
@@ -47,15 +49,15 @@ namespace GlobalIMCAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([FromForm] ProductDTO NewProduct)
         {
-            var FilesPath = Directory.GetCurrentDirectory() + "/images";
+            string FilesPath = Path.Combine(this._WebHostEnvironment.WebRootPath, "images");
             string FileName = DateTime.Now.Ticks + Path.GetExtension(NewProduct.ImageFF.FileName);
-            var FilePath = Path.Combine(FilesPath, FileName);
+            string FilePath = Path.Combine(FilesPath, FileName);
             using (var stream = new FileStream(FilePath, FileMode.Create))
             {
                 await NewProduct.ImageFF.CopyToAsync(stream);
             }
-            NewProduct.Image = Path.GetFullPath(FilePath);
-            
+            NewProduct.Image = $"images/{FileName}";
+
             ServiceResponse<int> Result = await this._ProductService.Create(NewProduct);
             return ValidateAction(Result);
         }
@@ -68,7 +70,7 @@ namespace GlobalIMCAPI.Controllers
             ServiceResponse<bool> Result = await this._ProductService.Delete(Id);
 
             if (Result.Success)
-                System.IO.File.Delete(OldImagePath);
+                System.IO.File.Delete(Path.Combine(this._WebHostEnvironment.WebRootPath, OldImagePath));
 
             return ValidateAction(Result);
         }
@@ -90,21 +92,21 @@ namespace GlobalIMCAPI.Controllers
         [HttpPut]
         public async Task<ActionResult> Update([FromForm] ProductDTO ProductToEdit)
         {
-            var FilesPath = Directory.GetCurrentDirectory() + "/images";
+            string FilesPath = Path.Combine(this._WebHostEnvironment.WebRootPath, "images");
             string FileName = DateTime.Now.Ticks + Path.GetExtension(ProductToEdit.ImageFF.FileName);
             var FilePath = Path.Combine(FilesPath, FileName);
             using (var stream = new FileStream(FilePath, FileMode.Create))
             {
                 await ProductToEdit.ImageFF.CopyToAsync(stream);
             }
-            ProductToEdit.Image = Path.GetFullPath(FilePath);
+            ProductToEdit.Image = $"images/{FileName}";
 
             string OldImagePath = (await this._ProductService.Get(ProductToEdit.Id, false)).Data.Image;
 
             ServiceResponse<bool> Result = await this._ProductService.Update(ProductToEdit);
 
             if (Result.Success)
-                System.IO.File.Delete(OldImagePath);
+                System.IO.File.Delete(Path.Combine(this._WebHostEnvironment.WebRootPath, OldImagePath));
 
             return ValidateAction(Result);
         }

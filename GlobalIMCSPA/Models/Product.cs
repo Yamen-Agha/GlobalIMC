@@ -1,4 +1,5 @@
-﻿using GlobalIMCSPA.Attributes;
+﻿using GlobalIMCSPA.APIHandlers;
+using GlobalIMCSPA.Attributes;
 using GlobalIMCSPA.Enums;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -42,6 +43,14 @@ namespace GlobalIMCSPA.Models
         [DataType(DataType.Upload)]
         [Display(Name = "Image")]
         public IFormFile ImageFF { get; set; }
+
+        public string ImageUrl 
+        { 
+            get
+            {
+                return ProductAPIHandler.API_ROOT_URL + this.Image;
+            }
+        }
 
         [Required]
         public DietaryFlags DietaryFlag { get; set; }
