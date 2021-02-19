@@ -3,7 +3,7 @@
 It contains three projects : \
 1 - Restful API .Net Core . \
 2 - Web Application .Net Core . \
-3 - Shared .Net Core Library . \
+3 - Shared .Net Core Library . 
 
 # Details
 
