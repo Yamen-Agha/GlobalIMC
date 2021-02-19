@@ -1,9 +1,9 @@
 # GlobalIMC
 
-It contains three projects :
-1 - Restful API .Net Core .
-2 - Web Application .Net Core .
-3 - Shared .Net Core Library .
+It contains three projects : \
+1 - Restful API .Net Core . \
+2 - Web Application .Net Core . \
+3 - Shared .Net Core Library . \
 
 # Details
 
@@ -32,6 +32,6 @@ Contains the DTO and the response structure to be recognized by both API and App
 
 
 ### Publish :
-Sadly I couldn't publish on Azure because I don't have an account but I published on another hosts and here the links :
-API : http://yamenagha766-001-site1.itempurl.com/
+Sadly I couldn't publish on Azure because I don't have an account but I published on another hosts and here the links : \
+API : http://yamenagha766-001-site1.itempurl.com/ \
 APP : http://yamenagha767-001-site1.itempurl.com/
