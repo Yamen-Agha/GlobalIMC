@@ -29,3 +29,9 @@ Contains the DTO and the response structure to be recognized by both API and App
 - Database : SQLServer 2019
 - IDE : Visual Studio 2019
 - .Net Version : .Net Core 3.1
+
+
+### Publish :
+Sadly I couldn't publish on Azure because I don't have an account but I published on another hosts and here the links :
+API : http://yamenagha766-001-site1.itempurl.com/
+APP : http://yamenagha767-001-site1.itempurl.com/
